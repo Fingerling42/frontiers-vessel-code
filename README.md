@@ -35,7 +35,7 @@ $ git clone https://github.com/Fingerling42/frontiers-vessel-code.git
 Build the cloned repository using Nix environment:
 
 ```
-    $ nix build -f release.nix
+$ nix build -f release.nix
 ```
 
 Or [standard ROS tools](http://wiki.ros.org/ROS/Tutorials/BuildingPackages). 
