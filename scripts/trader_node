@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''
+trader_node: script handles trading strategy
+
+At the moment there is no enhanced strategy, we simply reply on every demand we've received
+'''
+
 # Standart, System and Third Party
 
 # ROS
@@ -33,22 +39,29 @@ class TraderNode:
 
         rospy.loginfo('Trader node launched.')
 
+    # helps to reroute incoming message to handler
     def act(self, incoming):
         """ Trader reaction tactics on incoming offers and demands """
         if type(incoming) is Demand:
             self.make_offer(incoming.objective, incoming.cost) # to publish an offer
 
+    # Callback for incoming demand messages
     def on_incoming_demand(self, incoming: Demand):
         rospy.loginfo('Incoming demand %s...', str(incoming))
+        self.act(incoming)
 
+    # Callback for incoming offer messages
     def on_incoming_offer(self, incoming: Offer):
         rospy.loginfo('Incoming offer %s...', str(incoming))
 
+    # Calculates deadline
+    # Simply adds `lifetime` to current block number
     def make_deadline(self):
         lifetime = int(rospy.get_param('~order_lifetime'))
         deadline = rospy.ServiceProxy('/eth/current_block', BlockNumber)().number + lifetime
         return str(deadline)
 
+    # Builds a demand message and publishes it
     def make_demand(self, objective, cost):
         rospy.loginfo('Making demand...')
 
@@ -69,6 +82,7 @@ class TraderNode:
         self.signing_demand.publish(demand)
         rospy.loginfo(demand)
 
+    # Builds an offer message and publishes it
     def make_offer(self, objective, cost):
         rospy.loginfo('Making offer...')
 
@@ -91,6 +105,7 @@ class TraderNode:
         self.signing_offer.publish(offer)
         rospy.loginfo(offer)
 
+    # Service function allows to handle all callbacks from ROS
     def spin(self):
         rospy.spin()
 

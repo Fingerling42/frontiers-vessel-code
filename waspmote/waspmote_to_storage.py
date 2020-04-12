@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+'''
+waspmote_to_storage.py: service script to read data from serial port and store it a file
+'''
+
 import sys
 import serial
 import time

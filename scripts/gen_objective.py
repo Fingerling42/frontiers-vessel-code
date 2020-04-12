@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+'''
+gen_objective.py: a service file to build a test objective file
+
+In terms of Robonomics objective is IPFS hash that points to a rosbag file with dynamical parameters
+'''
+
 import rosbag, rospy
 from std_msgs.msg import Bool, String, Duration
 
