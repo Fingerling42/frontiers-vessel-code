@@ -1,2 +1,4 @@
+# for nix-shell util
+# creates a virtual development environment
 nix-shell -p python3Package.virtualenv
 source ./venv/bin/activate

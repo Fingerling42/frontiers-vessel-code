@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''
+pub_demand.py: service file to automate demand publishing
+
+A provider in Robonomics is looking for corresponding demand and offer messages.
+To launch the whole scenario we must publish a demand message.
+From the agent's side an offer message will be published
+'''
+
 # Standart, System and Third Party
 
 # ROS
@@ -44,6 +52,7 @@ if __name__ == '__main__':
 
     rospy.loginfo('Making demand...')
 
+    # Demand message consists of the following fields
     demand = Demand()
     demand.model = Multihash()
     demand.model.multihash = model
@@ -62,6 +71,7 @@ if __name__ == '__main__':
     demand.deadline = UInt256()
     demand.deadline.uint256 = deadline
 
+    # We ask robonomics_comm to publish the demand message by publishing the message to the ros topic
     signing_demand.publish(demand)
     rospy.loginfo(demand)
 

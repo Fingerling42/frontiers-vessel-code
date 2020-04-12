@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''
+worker_node: script handles actual work scenario
+
+Waits for a NewLiability event, which would be received at `/liability/ready` topic, and launches the liability execution
+'''
+
 # Standart, System and Third party
 from collections import namedtuple
 from queue import Queue
@@ -37,15 +43,20 @@ class WorkerNode:
 
         rospy.loginfo('Worker node launched.')
 
+    # Callback is called when a new liability is received
     def on_new_liability(self, msg):
         self.liability_queue.put(msg)
         rospy.loginfo("Got new liability %s", msg.address)
 
+    # Handles the queue of liabilities
+    # Pushes one at a time
     def _process_liability_queue(self):
         while not rospy.is_shutdown() and not self.in_process:
             msg = self.liability_queue.get()
             self.next_liability.publish(msg)
 
+    # All the dynamical parameters would be published at corresponding topics
+    # So before start we must subscribe to all necessary topics
     def subscribe_and_start(self, liability):
         rospy.loginfo('Starting process...')
 
@@ -60,6 +71,7 @@ class WorkerNode:
         Thread(target=self._process_liability_queue, daemon=True).start()
         rospy.spin()
 
+    # Waits until the work is done
     def work(self, liability, objective):
         rospy.loginfo('Starting new job...')
         # job execution

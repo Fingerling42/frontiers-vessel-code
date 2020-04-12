@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+'''
+pixhawk_to_storage.py: service script that stores data from pixhawk autopilot
+'''
+
 import sys
 import serial
 import time
